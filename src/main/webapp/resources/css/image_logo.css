@@ -1,0 +1,10 @@
+@charset "ISO-8859-1";
+
+*{
+	box-sizing: border-box !important;
+}
+
+.img_logo{
+	width: 150px;
+	
+}

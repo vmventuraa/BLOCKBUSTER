@@ -1,0 +1,74 @@
+drop table produtora
+drop table genero;
+drop table filmes;
+drop sequence SQ_ID_GENERO;
+drop sequence SQ_ID_PRODUTORA;
+drop sequence SQ_ID_FILMES;
+drop trigger TR_INS_GENERO;
+drop trigger TR_INS_PRODUTORA;
+drop trigger TR_INS_FILMES;
+
+CREATE TABLE filmes(
+    filme_id NUMBER(6) PRIMARY KEY,
+    titulo VARCHAR2(25),
+    dataPublicacao DATE,
+    genero_id NUMBER(6),
+    classificacao NUMBER(6),
+    produtora_id NUMBER(6),
+    duracao NUMBER(6)
+);
+
+CREATE TABLE genero(
+   genero_id NUMBER(6) PRIMARY KEY,
+    nome_genero VARCHAR2(25)
+);
+
+CREATE TABLE produtora(
+    produtora_id NUMBER(6) PRIMARY KEY,
+    nome_produtora VARCHAR2(25)
+);
+
+ALTER TABLE filmes
+ADD CONSTRAINT genero_filmes_fk
+FOREIGN KEY (genero_id)
+REFERENCES genero(genero_id);
+
+ALTER TABLE filmes
+ADD CONSTRAINT produtora_filmes_fk
+FOREIGN KEY (produtora_id)
+REFERENCES produtora (produtora_id);
+
+
+create sequence SQ_ID_GENERO start with 1 INCREMENT by 1;
+create sequence SQ_ID_PRODUTORA start with 1 INCREMENT by 1;
+create sequence SQ_ID_FILMES start with 1 INCREMENT BY 1;
+
+CREATE OR REPLACE TRIGGER TR_INS_GENERO
+BEFORE INSERT ON genero FOR EACH ROW       
+BEGIN
+  SELECT SQ_ID_GENERO.nextval
+  INTO :NEW.genero_id
+  FROM DUAL;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TR_INS_PRODUTORA
+BEFORE INSERT ON produtora FOR EACH ROW       
+BEGIN
+  SELECT SQ_ID_PRODUTORA.nextval
+  INTO :NEW.produtora_id
+  FROM DUAL;
+END;
+/
+
+CREATE OR REPLACE TRIGGER TR_INS_FILMES
+BEFORE INSERT ON filmes FOR EACH ROW       
+BEGIN
+  SELECT SQ_ID_FILMES.nextval
+  INTO :NEW.filme_id
+  FROM DUAL;
+END;
+/
+
+COMMIT
+
